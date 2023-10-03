@@ -1717,10 +1717,10 @@ PublicKey = ${SERVER_PUBKEY}" >>${WIREGUARD_CLIENT_PATH}/"${NEW_CLIENT_NAME}"-${
       # Calculate the SHA3-512 hash of the current WireGuard Manager script
       CURRENT_WIREGUARD_MANAGER_HASH=$(openssl dgst -sha3-512 "${CURRENT_FILE_PATH}" | cut --delimiter=" " --fields=2)
       # Calculate the SHA3-512 hash of the latest WireGuard Manager script from the remote source
-      NEW_WIREGUARD_MANAGER_HASH=$(curl --silent "${WIREGUARD_MANAGER_UPDATE}" | openssl dgst -sha3-512 | cut --delimiter=" " --fields=2)
+      NEW_WIREGUARD_MANAGER_HASH=$(curl -L --silent "${WIREGUARD_MANAGER_UPDATE}" | openssl dgst -sha3-512 | cut --delimiter=" " --fields=2)
       # If the hashes don't match, update the local WireGuard Manager script
       if [ "${CURRENT_WIREGUARD_MANAGER_HASH}" != "${NEW_WIREGUARD_MANAGER_HASH}" ]; then
-        curl "${WIREGUARD_MANAGER_UPDATE}" -o "${CURRENT_FILE_PATH}"
+        curl -L "${WIREGUARD_MANAGER_UPDATE}" -o "${CURRENT_FILE_PATH}"
         chmod +x "${CURRENT_FILE_PATH}"
       fi
       # Update the unbound configs if the unbound command is available on the system
